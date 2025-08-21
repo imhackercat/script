@@ -226,6 +226,8 @@ noBtn.ZIndex = 12   -- 讓按鈕顯示在遮罩之上
 closeBtn.MouseButton1Click:Connect(function()
     confirmFrame.Visible = true
     overlay.Visible = true
+    -- 延遲啟動 overlay.Active
+    task.delay(0.05, function()  -- 50毫秒延遲
     overlay.Active = true
 
 
