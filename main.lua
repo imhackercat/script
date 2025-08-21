@@ -219,6 +219,8 @@ noBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 
 closeBtn.MouseButton1Click:Connect(function()
     confirmFrame.Visible = true
+    overlay.Visible = true
+
 end)
 
 yesBtn.MouseButton1Click:Connect(function()
