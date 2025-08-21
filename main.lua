@@ -201,7 +201,7 @@ confirmLabel.TextSize = 20
 confirmLabel.Font = Enum.Font.GothamBold
 confirmLabel.TextColor3 = Color3.fromRGB(255,255,255)
 confirmLabel.BackgroundTransparency = 1
-confirmLabel.Zindex = 12 --讓你確定要關閉腳本嗎？顯示在遮罩之上
+confirmLabel.ZIndex = 12 --讓你確定要關閉腳本嗎？顯示在遮罩之上
 
 local yesBtn = Instance.new("TextButton", confirmFrame)
 yesBtn.Size = UDim2.new(0.5, -5, 0.3, 0)
