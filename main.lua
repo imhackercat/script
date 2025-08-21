@@ -75,6 +75,7 @@ closeBtn.Text = "X"
 closeBtn.Font = Enum.Font.GothamBold
 closeBtn.TextSize = 18
 closeBtn.TextColor3 = Color3.fromRGB(255, 80, 80)
+closeBtn.ZIndex = 13
 
 -- 功能容器
 local content = Instance.new("Frame", frame)
@@ -226,7 +227,6 @@ noBtn.ZIndex = 12   -- 讓按鈕顯示在遮罩之上
 closeBtn.MouseButton1Click:Connect(function()
     confirmFrame.Visible = true
     overlay.Visible = true
-    closeBtn.ZIndex = 13  -- 大於 overlay 與 confirmFrame
 
 
 end)
