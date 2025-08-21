@@ -178,6 +178,12 @@ miniFrame.MouseButton1Click:Connect(function()
 end)
 
 -- 🔹 關閉確認框
+local overlay = Instance.new("Frame", screenGui)
+overlay.Size = UDim2.new(1,0,1,0)
+overlay.BackgroundColor3 = Color3.fromRGB(0,0,0)
+overlay.BackgroundTransparency = 0.5
+overlay.Visible = false
+
 local confirmFrame = Instance.new("Frame", screenGui)
 confirmFrame.Size = UDim2.new(0, 200, 0, 120)
 confirmFrame.Position = UDim2.new(0.5, -100, 0.5, -60)
