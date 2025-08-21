@@ -183,6 +183,8 @@ overlay.Size = UDim2.new(1,0,1,0)
 overlay.BackgroundColor3 = Color3.fromRGB(0,0,0)
 overlay.BackgroundTransparency = 0.5
 overlay.Visible = false
+overlay.Active = true  -- 讓遮罩可以阻擋點擊
+overlay.ZIndex = 10    -- 確保遮罩在最上層
 
 local confirmFrame = Instance.new("Frame", screenGui)
 confirmFrame.Size = UDim2.new(0, 200, 0, 120)
@@ -190,6 +192,7 @@ confirmFrame.Position = UDim2.new(0.5, -100, 0.5, -60)
 confirmFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 confirmFrame.Visible = false
 Instance.new("UICorner", confirmFrame).CornerRadius = UDim.new(0, 10)
+confirmFrame.ZIndex = 11   -- ✅ 確認框在遮罩之上
 
 local confirmLabel = Instance.new("TextLabel", confirmFrame)
 confirmLabel.Size = UDim2.new(1, 0, 0.6, 0)
