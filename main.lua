@@ -201,6 +201,7 @@ confirmLabel.TextSize = 20
 confirmLabel.Font = Enum.Font.GothamBold
 confirmLabel.TextColor3 = Color3.fromRGB(255,255,255)
 confirmLabel.BackgroundTransparency = 1
+confirmLabel.Zindex = 12 --讓你確定要關閉腳本嗎？顯示在遮罩之上
 
 local yesBtn = Instance.new("TextButton", confirmFrame)
 yesBtn.Size = UDim2.new(0.5, -5, 0.3, 0)
@@ -210,7 +211,7 @@ yesBtn.Font = Enum.Font.GothamBold
 yesBtn.TextSize = 18
 yesBtn.TextColor3 = Color3.fromRGB(0,0,0)
 yesBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-yesBtn.ZIndex = 12           -- 按鈕在最上面
+yesBtn.ZIndex = 12  --讓按鈕顯示在遮罩之上
 
 local noBtn = Instance.new("TextButton", confirmFrame)
 noBtn.Size = UDim2.new(0.5, -5, 0.3, 0)
@@ -220,7 +221,7 @@ noBtn.Font = Enum.Font.GothamBold
 noBtn.TextSize = 18
 noBtn.TextColor3 = Color3.fromRGB(0,0,0)
 noBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-noBtn.ZIndex = 12           -- 按鈕在最上面
+noBtn.ZIndex = 12   -- 讓按鈕顯示在遮罩之上
 
 closeBtn.MouseButton1Click:Connect(function()
     confirmFrame.Visible = true
