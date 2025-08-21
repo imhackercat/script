@@ -183,8 +183,8 @@ overlay.Size = UDim2.new(1,0,1,0)
 overlay.BackgroundColor3 = Color3.fromRGB(0,0,0)
 overlay.BackgroundTransparency = 0.5
 overlay.Visible = false
-overlay.Active = true  -- 讓遮罩可以阻擋點擊
-overlay.ZIndex = 10    -- 遮罩
+overlay.Active = false  -- 遮罩一開始不擋
+overlay.ZIndex = 10 
 
 local confirmFrame = Instance.new("Frame", screenGui)
 confirmFrame.Size = UDim2.new(0, 200, 0, 120)
@@ -226,6 +226,7 @@ noBtn.ZIndex = 12   -- 讓按鈕顯示在遮罩之上
 closeBtn.MouseButton1Click:Connect(function()
     confirmFrame.Visible = true
     overlay.Visible = true
+    overlay.Active = true
 
 
 end)
@@ -237,6 +238,7 @@ end)
 noBtn.MouseButton1Click:Connect(function()
     confirmFrame.Visible = false
     overlay.Visible = false
+    overlay.Active = false
 end)
 
 -- 重生處理
