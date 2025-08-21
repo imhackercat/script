@@ -51,7 +51,7 @@ title.Size = UDim2.new(1, -60, 1, 0)
 title.Position = UDim2.new(0, 10, 0, 0)
 title.BackgroundTransparency = 1
 title.Font = Enum.Font.GothamBold
-title.Text = "簡易腳本 v1.0.5"
+title.Text = "簡易腳本 v1.0.6"
 title.TextSize = 16
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.TextXAlignment = Enum.TextXAlignment.Left
@@ -137,7 +137,7 @@ end
 createToggle(content, "朝視角瞬移", function(state)
     flyEnabled = state
     if flyEnabled then
-        flyLoop()
+        task.spawn(flyLoop)
     end
 end, 1)
 
@@ -245,8 +245,9 @@ noBtn.MouseButton1Click:Connect(function()
     overlay.Active = false
 end)
 
--- 重生處理
-player.CharacterAdded:Connect(function()
-    task.wait(1)
-    character, rootPart, humanoid = getCharacter()
+-- 抓角色重生
+player.CharacterAdded:Connect(function(char)
+    character = char or player.Character
+    rootPart = character:WaitForChild("HumanoidRootPart")
+    humanoid = character:WaitForChild("Humanoid")
 end)
