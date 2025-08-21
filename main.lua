@@ -229,6 +229,7 @@ end)
 
 noBtn.MouseButton1Click:Connect(function()
     confirmFrame.Visible = false
+    overlay.Visible = false
 end)
 
 -- 重生處理
