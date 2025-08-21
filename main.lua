@@ -210,6 +210,7 @@ yesBtn.Font = Enum.Font.GothamBold
 yesBtn.TextSize = 18
 yesBtn.TextColor3 = Color3.fromRGB(0,0,0)
 yesBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+yesBtn.ZIndex = 12           -- 按鈕在最上面
 
 local noBtn = Instance.new("TextButton", confirmFrame)
 noBtn.Size = UDim2.new(0.5, -5, 0.3, 0)
@@ -219,6 +220,7 @@ noBtn.Font = Enum.Font.GothamBold
 noBtn.TextSize = 18
 noBtn.TextColor3 = Color3.fromRGB(0,0,0)
 noBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+noBtn.ZIndex = 12           -- 按鈕在最上面
 
 closeBtn.MouseButton1Click:Connect(function()
     confirmFrame.Visible = true
@@ -228,13 +230,11 @@ end)
 
 yesBtn.MouseButton1Click:Connect(function()
     screenGui:Destroy()
-    yesBtn.ZIndex = 12           -- 按鈕在最上面
 end)
 
 noBtn.MouseButton1Click:Connect(function()
     confirmFrame.Visible = false
     overlay.Visible = false
-    noBtn.ZIndex = 12           -- 按鈕在最上面
 end)
 
 -- 重生處理
