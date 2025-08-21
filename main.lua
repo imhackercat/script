@@ -226,6 +226,8 @@ noBtn.ZIndex = 12   -- 讓按鈕顯示在遮罩之上
 closeBtn.MouseButton1Click:Connect(function()
     confirmFrame.Visible = true
     overlay.Visible = true
+    closeBtn.ZIndex = 13  -- 大於 overlay 與 confirmFrame
+
 
 end)
 
