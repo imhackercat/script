@@ -3,7 +3,7 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local camera = workspace.CurrentCamera
 
--- 初始化角色
+-- 初始化
 local function getCharacter()
     local char = player.Character or player.CharacterAdded:Wait()
     local root = char:WaitForChild("HumanoidRootPart")
@@ -22,7 +22,7 @@ local bodyVel = nil
 
 -- GUI
 local screenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-screenGui.Name = "掛貓簡易外掛"
+screenGui.Name = "掛貓簡易腳本"
 screenGui.ResetOnSpawn = false
 
 -- 主框架
@@ -133,7 +133,7 @@ local function flyLoop()
     end
 end
 
--- 功能：朝視角瞬移
+-- 朝視角瞬移
 createToggle(content, "朝視角瞬移", function(state)
     flyEnabled = state
     if flyEnabled then
@@ -141,7 +141,7 @@ createToggle(content, "朝視角瞬移", function(state)
     end
 end, 1)
 
--- 功能：空中懸停
+-- 空中懸停
 createToggle(content, "空中懸停", function(state)
     hoverEnabled = state
     if hoverEnabled then
@@ -154,7 +154,7 @@ createToggle(content, "空中懸停", function(state)
     end
 end, 2)
 
--- 🔹 最小化功能
+-- 🔹 最小化時
 local miniFrame = Instance.new("TextButton")
 miniFrame.Size = UDim2.new(0, 80, 0, 80)
 miniFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
