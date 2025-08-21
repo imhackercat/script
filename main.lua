@@ -51,7 +51,7 @@ title.Size = UDim2.new(1, -60, 1, 0)
 title.Position = UDim2.new(0, 10, 0, 0)
 title.BackgroundTransparency = 1
 title.Font = Enum.Font.GothamBold
-title.Text = "簡易腳本 v1.0.4"
+title.Text = "簡易腳本 v1.0.5"
 title.TextSize = 16
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.TextXAlignment = Enum.TextXAlignment.Left
@@ -184,7 +184,7 @@ overlay.BackgroundColor3 = Color3.fromRGB(0,0,0)
 overlay.BackgroundTransparency = 0.5
 overlay.Visible = false
 overlay.Active = false  -- 遮罩一開始不擋
-overlay.ZIndex = 10 
+overlay.ZIndex = 1
 
 local confirmFrame = Instance.new("Frame", screenGui)
 confirmFrame.Size = UDim2.new(0, 200, 0, 120)
