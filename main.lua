@@ -24,49 +24,56 @@ local bodyVel = nil
 local espEnabled = false
 local espObjects = {}
 
--- 統一 ESP 函式
-local function addESP(char)
-    if char and not espObjects[char] then
-        espObjects[char] = {}
-        for _, part in ipairs(char:GetDescendants()) do
-            if part:IsA("BasePart") then
-                local highlight = Instance.new("Highlight")
-                highlight.Name = "ESP_Highlight"
-                highlight.FillColor = Color3.fromRGB(255, 0, 0)
-                highlight.FillTransparency = 0.5
-                highlight.OutlineTransparency = 1
-                highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-                highlight.Parent = char
-                table.insert(espObjects[char], highlight)
+-- 加 ESP
+local function addESPToCharacter(char)
+    if not char or char == player.Character then return end -- 不加自己
+    if char:FindFirstChild("ESP_Highlight") then return end -- 避免重複
+    local highlight = Instance.new("Highlight")
+    highlight.Name = "ESP_Highlight"
+    highlight.FillColor = Color3.fromRGB(255, 0, 0) -- 紅色
+    highlight.FillTransparency = 0.5
+    highlight.OutlineTransparency = 1
+    highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+    highlight.Parent = char
+    espObjects[char] = highlight
+end
+
+-- 移除 ESP
+local function removeESPFromCharacter(char)
+    if espObjects[char] then
+        espObjects[char]:Destroy()
+        espObjects[char] = nil
+    end
+end
+
+-- 開啟 ESP
+local function enableESP()
+    espEnabled = true
+    for _, plr in pairs(Players:GetPlayers()) do
+        if plr ~= player and plr.Character then
+            addESPToCharacter(plr.Character)
+        end
+        plr.CharacterAdded:Connect(function(char)
+            if espEnabled then
+                task.wait(1)
+                addESPToCharacter(char)
             end
-        end
+        end)
     end
-end
-
-local function disableESP()
-    espEnabled = false
-    for char, objects in pairs(espObjects) do
-        for _, obj in ipairs(objects) do
-            obj:Destroy()
-        end
-    end
-    espObjects = {}
-end
-
--- 監聽玩家加入與角色生成
-Players.PlayerAdded:Connect(function(plr)
-    plr.CharacterAdded:Connect(function(char)
-        task.wait(0.5)
-        if espEnabled then
-            addESP(char)
+    Players.PlayerRemoving:Connect(function(plr)
+        if plr.Character then
+            removeESPFromCharacter(plr.Character)
         end
     end)
-end)
+end
 
-for _, plr in pairs(Players:GetPlayers()) do
-    if plr.Character then
-        addESP(plr.Character)
+-- 關閉 ESP
+local function disableESP()
+    espEnabled = false
+    for char, highlight in pairs(espObjects) do
+        if highlight then highlight:Destroy() end
     end
+    espObjects = {}
 end
 
 -- GUI
@@ -101,7 +108,7 @@ title.Size = UDim2.new(1, -60, 1, 0)
 title.Position = UDim2.new(0, 10, 0, 0)
 title.BackgroundTransparency = 1
 title.Font = Enum.Font.GothamBold
-title.Text = "簡易腳本 v1.1.10"
+title.Text = "簡易腳本 v1.1.11"
 title.TextSize = 16
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.TextXAlignment = Enum.TextXAlignment.Left
@@ -205,14 +212,9 @@ createToggle(content, "空中懸停", function(state)
 end, 2)
 
 -- 功能：玩家透視
-createToggle(content, "透視玩家", function(state)
-    espEnabled = state
-    if espEnabled then
-        for _, plr in pairs(Players:GetPlayers()) do
-            if plr.Character then
-                addESP(plr.Character)
-            end
-        end
+createToggle(content, "玩家透視", function(state)
+    if state then
+        enableESP()
     else
         disableESP()
     end
@@ -224,7 +226,7 @@ miniFrame.Size = UDim2.new(0, 80, 0, 80)
 miniFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 miniFrame.Text = "掛貓"
 miniFrame.TextColor3 = Color3.fromRGB(255, 150, 0)
-miniFrame.TextSize = 28
+miniFrame.TextSize = 24
 miniFrame.Font = Enum.Font.GothamBold
 miniFrame.Visible = false
 miniFrame.Active = true
