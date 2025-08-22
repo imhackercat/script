@@ -231,7 +231,7 @@ local function addESP(char)
     end
 end
 
-createToggle(content, "玩家透視", function(state)
+createToggle(content, "透視玩家", function(state)
     espEnabled = state
     if espEnabled then
         for _, plr in pairs(Players:GetPlayers()) do
@@ -323,15 +323,7 @@ yesBtn.MouseButton1Click:Connect(function()
     hoverEnabled = false
     espEnabled = false
     if bodyVel then bodyVel:Destroy() bodyVel = nil end
-    for _, plr in pairs(Players:GetPlayers()) do -- 🧹 清理玩家身上的 ESP
-        if plr.Character then -- 🧹 清理玩家身上的 ESP
-            for _, obj in pairs(plr.Character:GetChildren()) do -- 🧹 清理玩家身上的 ESP
-                if obj:IsA("Highlight") or obj:IsA("BoxHandleAdornment") then -- 🧹 清理玩家身上的 ESP
-                    obj:Destroy() -- 🧹 清理玩家身上的 ESP
-                end
-            end
-        end
-    end
+    disableESP()  -- 用函式一次清掉全部 ESP
     screenGui:Destroy()
 end)
 
