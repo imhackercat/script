@@ -24,61 +24,49 @@ local bodyVel = nil
 local espEnabled = false
 local espObjects = {}
 
-local function addESP(plr)
-    if plr ~= player and plr.Character then
-        for _, part in ipairs(plr.Character:GetDescendants()) do
+-- 統一 ESP 函式
+local function addESP(char)
+    if char and not espObjects[char] then
+        espObjects[char] = {}
+        for _, part in ipairs(char:GetDescendants()) do
             if part:IsA("BasePart") then
-                local highlight = Instance.new("BoxHandleAdornment")
-                highlight.Size = part.Size
-                highlight.AlwaysOnTop = true
-                highlight.ZIndex = 0
-                highlight.Transparency = 0.5
-                highlight.Color3 = Color3.fromRGB(255, 0, 0) -- 紅色
-                highlight.Adornee = part
-                highlight.Parent = part
-
-                espObjects[plr] = espObjects[plr] or {}
-                table.insert(espObjects[plr], highlight)
+                local highlight = Instance.new("Highlight")
+                highlight.Name = "ESP_Highlight"
+                highlight.FillColor = Color3.fromRGB(255, 0, 0)
+                highlight.FillTransparency = 0.5
+                highlight.OutlineTransparency = 1
+                highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+                highlight.Parent = char
+                table.insert(espObjects[char], highlight)
             end
         end
     end
-end
-
-local function removeESP(plr)
-    if espObjects[plr] then
-        for _, obj in ipairs(espObjects[plr]) do
-            obj:Destroy()
-        end
-        espObjects[plr] = nil
-    end
-end
-
-local function enableESP()
-    espEnabled = true
-    for _, plr in ipairs(Players:GetPlayers()) do
-        addESP(plr)
-    end
-    Players.PlayerAdded:Connect(function(plr)
-        plr.CharacterAdded:Connect(function()
-            if espEnabled then
-                task.wait(1)
-                addESP(plr)
-            end
-        end)
-    end)
-    Players.PlayerRemoving:Connect(function(plr)
-        removeESP(plr)
-    end)
 end
 
 local function disableESP()
     espEnabled = false
-    for plr, objects in pairs(espObjects) do
+    for char, objects in pairs(espObjects) do
         for _, obj in ipairs(objects) do
             obj:Destroy()
         end
     end
     espObjects = {}
+end
+
+-- 監聽玩家加入與角色生成
+Players.PlayerAdded:Connect(function(plr)
+    plr.CharacterAdded:Connect(function(char)
+        task.wait(0.5)
+        if espEnabled then
+            addESP(char)
+        end
+    end)
+end)
+
+for _, plr in pairs(Players:GetPlayers()) do
+    if plr.Character then
+        addESP(plr.Character)
+    end
 end
 
 -- GUI
@@ -113,7 +101,7 @@ title.Size = UDim2.new(1, -60, 1, 0)
 title.Position = UDim2.new(0, 10, 0, 0)
 title.BackgroundTransparency = 1
 title.Font = Enum.Font.GothamBold
-title.Text = "簡易腳本 v1.1.9"
+title.Text = "簡易腳本 v1.1.10"
 title.TextSize = 16
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.TextXAlignment = Enum.TextXAlignment.Left
@@ -217,21 +205,14 @@ createToggle(content, "空中懸停", function(state)
 end, 2)
 
 -- 功能：玩家透視
-local function addESP(char)
-    if char and not char:FindFirstChild("ESP_Highlight") then
-        local highlight = Instance.new("Highlight")
-        highlight.Name = "ESP_Highlight"
-        highlight.FillColor = Color3.fromRGB(255, 0, 0) -- 紅色
-        highlight.FillTransparency = 0.5
-        highlight.OutlineTransparency = 1
-        highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-        highlight.Parent = char
-    end
-end
-
-createToggle(content, "玩家透視", function(state)
-    if state then
-        enableESP()
+createToggle(content, "透視玩家", function(state)
+    espEnabled = state
+    if espEnabled then
+        for _, plr in pairs(Players:GetPlayers()) do
+            if plr.Character then
+                addESP(plr.Character)
+            end
+        end
     else
         disableESP()
     end
@@ -243,7 +224,7 @@ miniFrame.Size = UDim2.new(0, 80, 0, 80)
 miniFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 miniFrame.Text = "掛貓"
 miniFrame.TextColor3 = Color3.fromRGB(255, 150, 0)
-miniFrame.TextSize = 24
+miniFrame.TextSize = 28
 miniFrame.Font = Enum.Font.GothamBold
 miniFrame.Visible = false
 miniFrame.Active = true
