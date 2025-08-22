@@ -52,7 +52,7 @@ title.Size = UDim2.new(1, -60, 1, 0)
 title.Position = UDim2.new(0, 10, 0, 0)
 title.BackgroundTransparency = 1
 title.Font = Enum.Font.GothamBold
-title.Text = "簡易腳本 v1.0.6"
+title.Text = "簡易腳本 v1.0.7"
 title.TextSize = 16
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.TextXAlignment = Enum.TextXAlignment.Left
@@ -167,6 +167,7 @@ miniFrame.Visible = false
 miniFrame.Active = true
 miniFrame.Draggable = true
 miniFrame.Parent = screenGui
+Instance.new("UICorner", miniFrame).CornerRadius = UDim.new(0, 12)-- 加上圓角
 
 minimizeBtn.MouseButton1Click:Connect(function()
     frame.Visible = false
@@ -217,6 +218,9 @@ closeBtn.MouseButton1Click:Connect(function()
 end)
 
 yesBtn.MouseButton1Click:Connect(function()
+    flyEnabled = false
+    hoverEnabled = false
+    if bodyVel then bodyVel:Destroy() bodyVel = nil end
     screenGui:Destroy()
 end)
 
