@@ -218,41 +218,22 @@ end, 2)
 
 -- 功能：玩家透視
 local function addESP(char)
-    if char and char:FindFirstChild("HumanoidRootPart") then
-        if not char:FindFirstChild("ESP_Highlight") then
-            local highlight = Instance.new("Highlight")
-            highlight.Name = "ESP_Highlight"
-            highlight.FillColor = Color3.fromRGB(255, 0, 0) -- 紅色
-            highlight.FillTransparency = 0.5
-            highlight.OutlineTransparency = 1
-            highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-            highlight.Parent = char
-        end
+    if char and not char:FindFirstChild("ESP_Highlight") then
+        local highlight = Instance.new("Highlight")
+        highlight.Name = "ESP_Highlight"
+        highlight.FillColor = Color3.fromRGB(255, 0, 0) -- 紅色
+        highlight.FillTransparency = 0.5
+        highlight.OutlineTransparency = 1
+        highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+        highlight.Parent = char
     end
 end
 
-createToggle(content, "透視玩家", function(state)
-    espEnabled = state
-    if espEnabled then
-        for _, plr in pairs(Players:GetPlayers()) do
-            if plr ~= player then
-                if plr.Character then
-                    addESP(plr.Character)
-                end
-                plr.CharacterAdded:Connect(function(char)
-                    task.wait(1)
-                    if espEnabled then
-                        addESP(char)
-                    end
-                end)
-            end
-        end
+createToggle(content, "玩家透視", function(state)
+    if state then
+        enableESP()
     else
-        for _, plr in pairs(Players:GetPlayers()) do
-            if plr ~= player and plr.Character and plr.Character:FindFirstChild("ESP_Highlight") then
-                plr.Character.ESP_Highlight:Destroy()
-            end
-        end
+        disableESP()
     end
 end, 3)
 
