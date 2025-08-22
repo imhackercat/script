@@ -1,4 +1,4 @@
--- 掛貓簡易腳本
+-- 掛貓簡易腳本 v1.1.12
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local camera = workspace.CurrentCamera
@@ -26,11 +26,11 @@ local espObjects = {}
 
 -- 加 ESP
 local function addESPToCharacter(char)
-    if not char or char == player.Character then return end -- 不加自己
-    if char:FindFirstChild("ESP_Highlight") then return end -- 避免重複
+    if not char or char == player.Character then return end
+    if char:FindFirstChild("ESP_Highlight") then return end
     local highlight = Instance.new("Highlight")
     highlight.Name = "ESP_Highlight"
-    highlight.FillColor = Color3.fromRGB(255, 0, 0) -- 紅色
+    highlight.FillColor = Color3.fromRGB(255, 0, 0)
     highlight.FillTransparency = 0.5
     highlight.OutlineTransparency = 1
     highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
@@ -46,23 +46,17 @@ local function removeESPFromCharacter(char)
     end
 end
 
--- 開啟 ESP
+-- 開啟 ESP (每5秒刷新一次)
 local function enableESP()
     espEnabled = true
-    for _, plr in pairs(Players:GetPlayers()) do
-        if plr ~= player and plr.Character then
-            addESPToCharacter(plr.Character)
-        end
-        plr.CharacterAdded:Connect(function(char)
-            if espEnabled then
-                task.wait(1)
-                addESPToCharacter(char)
+    spawn(function()
+        while espEnabled do
+            for _, plr in pairs(Players:GetPlayers()) do
+                if plr ~= player and plr.Character then
+                    addESPToCharacter(plr.Character)
+                end
             end
-        end)
-    end
-    Players.PlayerRemoving:Connect(function(plr)
-        if plr.Character then
-            removeESPFromCharacter(plr.Character)
+            task.wait(5)
         end
     end)
 end
@@ -108,7 +102,7 @@ title.Size = UDim2.new(1, -60, 1, 0)
 title.Position = UDim2.new(0, 10, 0, 0)
 title.BackgroundTransparency = 1
 title.Font = Enum.Font.GothamBold
-title.Text = "簡易腳本 v1.1.11"
+title.Text = "簡易腳本 v1.1.12"
 title.TextSize = 16
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.TextXAlignment = Enum.TextXAlignment.Left
@@ -161,7 +155,7 @@ local function createToggle(parent, name, callback, order)
     local toggle = Instance.new("TextButton")
     toggle.Size = UDim2.new(0, 40, 0, 25)
     toggle.Position = UDim2.new(0.75, 0, 0.2, 0)
-    toggle.BackgroundColor3 = Color3.fromRGB(200, 50, 50) -- 預設紅
+    toggle.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
     toggle.Text = ""
     toggle.Parent = row
     Instance.new("UICorner", toggle).CornerRadius = UDim.new(1, 0)
@@ -169,11 +163,7 @@ local function createToggle(parent, name, callback, order)
     local state = false
     toggle.MouseButton1Click:Connect(function()
         state = not state
-        if state then
-            toggle.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
-        else
-            toggle.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-        end
+        toggle.BackgroundColor3 = state and Color3.fromRGB(50, 200, 50) or Color3.fromRGB(200, 50, 50)
         callback(state)
     end)
 end
@@ -193,9 +183,7 @@ end
 -- 功能：朝視角瞬移
 createToggle(content, "朝視角瞬移", function(state)
     flyEnabled = state
-    if flyEnabled then
-        flyLoop()
-    end
+    if flyEnabled then flyLoop() end
 end, 1)
 
 -- 功能：空中懸停
@@ -213,11 +201,7 @@ end, 2)
 
 -- 功能：玩家透視
 createToggle(content, "玩家透視", function(state)
-    if state then
-        enableESP()
-    else
-        disableESP()
-    end
+    if state then enableESP() else disableESP() end
 end, 3)
 
 -- 🔹 最小化功能
@@ -287,7 +271,7 @@ yesBtn.MouseButton1Click:Connect(function()
     hoverEnabled = false
     espEnabled = false
     if bodyVel then bodyVel:Destroy() bodyVel = nil end
-    disableESP()  -- 用函式一次清掉全部 ESP
+    disableESP()
     screenGui:Destroy()
 end)
 
