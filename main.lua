@@ -20,6 +20,9 @@ local speed = 5
 local interval = 0.05
 local bodyVel = nil
 
+-- ESP 控制變數
+local espEnabled = false
+
 -- GUI
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "掛貓Gui"
@@ -52,7 +55,7 @@ title.Size = UDim2.new(1, -60, 1, 0)
 title.Position = UDim2.new(0, 10, 0, 0)
 title.BackgroundTransparency = 1
 title.Font = Enum.Font.GothamBold
-title.Text = "簡易腳本 v1.0.7"
+title.Text = "簡易腳本 v1.1.7"
 title.TextSize = 16
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.TextXAlignment = Enum.TextXAlignment.Left
@@ -155,6 +158,46 @@ createToggle(content, "空中懸停", function(state)
     end
 end, 2)
 
+-- 功能：玩家透視
+local function addESP(char)
+    if char and char:FindFirstChild("HumanoidRootPart") then
+        if not char:FindFirstChild("ESP_Highlight") then
+            local highlight = Instance.new("Highlight")
+            highlight.Name = "ESP_Highlight"
+            highlight.FillColor = Color3.fromRGB(255, 0, 0) -- 紅色
+            highlight.FillTransparency = 0.5
+            highlight.OutlineTransparency = 1
+            highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+            highlight.Parent = char
+        end
+    end
+end
+
+createToggle(content, "玩家透視", function(state)
+    espEnabled = state
+    if espEnabled then
+        for _, plr in pairs(Players:GetPlayers()) do
+            if plr ~= player then
+                if plr.Character then
+                    addESP(plr.Character)
+                end
+                plr.CharacterAdded:Connect(function(char)
+                    task.wait(1)
+                    if espEnabled then
+                        addESP(char)
+                    end
+                end)
+            end
+        end
+    else
+        for _, plr in pairs(Players:GetPlayers()) do
+            if plr ~= player and plr.Character and plr.Character:FindFirstChild("ESP_Highlight") then
+                plr.Character.ESP_Highlight:Destroy()
+            end
+        end
+    end
+end, 3)
+
 -- 🔹 最小化功能
 local miniFrame = Instance.new("TextButton")
 miniFrame.Size = UDim2.new(0, 80, 0, 80)
@@ -167,7 +210,7 @@ miniFrame.Visible = false
 miniFrame.Active = true
 miniFrame.Draggable = true
 miniFrame.Parent = screenGui
-Instance.new("UICorner", miniFrame).CornerRadius = UDim.new(0, 12)-- 加上圓角
+Instance.new("UICorner", miniFrame).CornerRadius = UDim.new(0, 12)
 
 minimizeBtn.MouseButton1Click:Connect(function()
     frame.Visible = false
@@ -220,6 +263,7 @@ end)
 yesBtn.MouseButton1Click:Connect(function()
     flyEnabled = false
     hoverEnabled = false
+    espEnabled = false
     if bodyVel then bodyVel:Destroy() bodyVel = nil end
     screenGui:Destroy()
 end)
