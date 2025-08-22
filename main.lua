@@ -16,14 +16,15 @@ local character, rootPart, humanoid = getCharacter()
 -- 控制變數
 local flyEnabled = false
 local hoverEnabled = false
-local speed = 6
+local speed = 5
 local interval = 0.05
 local bodyVel = nil
 
 -- GUI
-local screenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "掛貓Gui"
 screenGui.ResetOnSpawn = false
+screenGui.Parent = player:WaitForChild("PlayerGui")
 
 -- 主框架
 local frame = Instance.new("Frame")
