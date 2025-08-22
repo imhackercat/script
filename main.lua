@@ -1,4 +1,4 @@
--- 掛貓 懸浮瞬移 v8（標題列 + 最小化 + 關閉確認）
+-- 掛貓簡易腳本
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local camera = workspace.CurrentCamera
