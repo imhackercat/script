@@ -29,9 +29,9 @@ screenGui.Name = "掛貓Gui"
 screenGui.ResetOnSpawn = false
 screenGui.Parent = player:WaitForChild("PlayerGui")
 
--- 主框架
+-- 主介面
 local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 250, 0, 160)
+frame.Size = UDim2.new(0, 300, 0, 260)
 frame.AnchorPoint = Vector2.new(0.5, 0.5)
 frame.Position = UDim2.new(0.5, 0, 0.5, 0)
 frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
@@ -55,7 +55,7 @@ title.Size = UDim2.new(1, -60, 1, 0)
 title.Position = UDim2.new(0, 10, 0, 0)
 title.BackgroundTransparency = 1
 title.Font = Enum.Font.GothamBold
-title.Text = "簡易腳本 v1.1.7"
+title.Text = "簡易腳本 v1.1.8"
 title.TextSize = 16
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.TextXAlignment = Enum.TextXAlignment.Left
@@ -265,6 +265,15 @@ yesBtn.MouseButton1Click:Connect(function()
     hoverEnabled = false
     espEnabled = false
     if bodyVel then bodyVel:Destroy() bodyVel = nil end
+    for _, plr in pairs(Players:GetPlayers()) do -- 🧹 清理玩家身上的 ESP
+        if plr.Character then -- 🧹 清理玩家身上的 ESP
+            for _, obj in pairs(plr.Character:GetChildren()) do -- 🧹 清理玩家身上的 ESP
+                if obj:IsA("Highlight") or obj:IsA("BoxHandleAdornment") then -- 🧹 清理玩家身上的 ESP
+                    obj:Destroy() -- 🧹 清理玩家身上的 ESP
+                end
+            end
+        end
+    end
     screenGui:Destroy()
 end)
 
