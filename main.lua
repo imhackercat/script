@@ -1,9 +1,9 @@
--- 簡易腳本
+-- 掛貓 懸浮瞬移 v8（標題列 + 最小化 + 關閉確認）
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local camera = workspace.CurrentCamera
 
--- 初始化
+-- 初始化角色
 local function getCharacter()
     local char = player.Character or player.CharacterAdded:Wait()
     local root = char:WaitForChild("HumanoidRootPart")
@@ -22,7 +22,7 @@ local bodyVel = nil
 
 -- GUI
 local screenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-screenGui.Name = "掛貓簡易腳本"
+screenGui.Name = "掛貓Gui"
 screenGui.ResetOnSpawn = false
 
 -- 主框架
@@ -133,15 +133,15 @@ local function flyLoop()
     end
 end
 
--- 朝視角瞬移
+-- 功能：朝視角瞬移
 createToggle(content, "朝視角瞬移", function(state)
     flyEnabled = state
     if flyEnabled then
-        task.spawn(flyLoop)
+        flyLoop()
     end
 end, 1)
 
--- 空中懸停
+-- 功能：空中懸停
 createToggle(content, "空中懸停", function(state)
     hoverEnabled = state
     if hoverEnabled then
@@ -154,13 +154,13 @@ createToggle(content, "空中懸停", function(state)
     end
 end, 2)
 
--- 🔹 最小化時
+-- 🔹 最小化功能
 local miniFrame = Instance.new("TextButton")
 miniFrame.Size = UDim2.new(0, 80, 0, 80)
 miniFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-miniFrame.Text = "掛貓製作"
+miniFrame.Text = "掛貓"
 miniFrame.TextColor3 = Color3.fromRGB(255, 150, 0)
-miniFrame.TextSize = 23
+miniFrame.TextSize = 24
 miniFrame.Font = Enum.Font.GothamBold
 miniFrame.Visible = false
 miniFrame.Active = true
@@ -178,40 +178,29 @@ miniFrame.MouseButton1Click:Connect(function()
 end)
 
 -- 🔹 關閉確認框
-local overlay = Instance.new("Frame", screenGui)
-overlay.Size = UDim2.new(1,0,1,0)
-overlay.BackgroundColor3 = Color3.fromRGB(0,0,0)
-overlay.BackgroundTransparency = 0.5
-overlay.Visible = false
-overlay.Active = false  -- 遮罩一開始不擋
-overlay.ZIndex = 10
-
 local confirmFrame = Instance.new("Frame", screenGui)
 confirmFrame.Size = UDim2.new(0, 200, 0, 120)
 confirmFrame.Position = UDim2.new(0.5, -100, 0.5, -60)
 confirmFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 confirmFrame.Visible = false
 Instance.new("UICorner", confirmFrame).CornerRadius = UDim.new(0, 10)
-confirmFrame.ZIndex = 11   -- ✅ 確認框在遮罩之上
 
 local confirmLabel = Instance.new("TextLabel", confirmFrame)
 confirmLabel.Size = UDim2.new(1, 0, 0.6, 0)
 confirmLabel.Text = "你確定要關閉腳本嗎？"
-confirmLabel.TextSize = 20
+confirmLabel.TextSize = 16
 confirmLabel.Font = Enum.Font.GothamBold
-confirmLabel.TextColor3 = Color3.fromRGB(255,255,255)
+confirmLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 confirmLabel.BackgroundTransparency = 1
-confirmLabel.ZIndex = 12 --讓你確定要關閉腳本嗎？顯示在遮罩之上
 
 local yesBtn = Instance.new("TextButton", confirmFrame)
 yesBtn.Size = UDim2.new(0.5, -5, 0.3, 0)
 yesBtn.Position = UDim2.new(0, 0, 0.7, 0)
 yesBtn.Text = "是"
 yesBtn.Font = Enum.Font.GothamBold
-yesBtn.TextSize = 18
-yesBtn.TextColor3 = Color3.fromRGB(0,0,0)
+yesBtn.TextSize = 20
+yesBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
 yesBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-yesBtn.ZIndex = 12  --讓按鈕顯示在遮罩之上
 
 local noBtn = Instance.new("TextButton", confirmFrame)
 noBtn.Size = UDim2.new(0.5, -5, 0.3, 0)
@@ -219,20 +208,11 @@ noBtn.Position = UDim2.new(0.5, 5, 0.7, 0)
 noBtn.Text = "否"
 noBtn.Font = Enum.Font.GothamBold
 noBtn.TextSize = 18
-noBtn.TextColor3 = Color3.fromRGB(0,0,0)
+noBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
 noBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-noBtn.ZIndex = 12   -- 讓按鈕顯示在遮罩之上
 
 closeBtn.MouseButton1Click:Connect(function()
     confirmFrame.Visible = true
-    overlay.Visible = true
-    overlay.Active = true
-    task.delay(0.05, function()
-    end)
-end)
-
-
-
 end)
 
 yesBtn.MouseButton1Click:Connect(function()
@@ -241,13 +221,10 @@ end)
 
 noBtn.MouseButton1Click:Connect(function()
     confirmFrame.Visible = false
-    overlay.Visible = false
-    overlay.Active = false
 end)
 
--- 抓角色重生
-player.CharacterAdded:Connect(function(char)
-    character = char or player.Character
-    rootPart = character:WaitForChild("HumanoidRootPart")
-    humanoid = character:WaitForChild("Humanoid")
+-- 重生處理
+player.CharacterAdded:Connect(function()
+    task.wait(1)
+    character, rootPart, humanoid = getCharacter()
 end)
