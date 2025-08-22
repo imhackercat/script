@@ -20,8 +20,66 @@ local speed = 5
 local interval = 0.05
 local bodyVel = nil
 
--- ESP 控制變數
+-- ESP功能
 local espEnabled = false
+local espObjects = {}
+
+local function addESP(plr)
+    if plr ~= player and plr.Character then
+        for _, part in ipairs(plr.Character:GetDescendants()) do
+            if part:IsA("BasePart") then
+                local highlight = Instance.new("BoxHandleAdornment")
+                highlight.Size = part.Size
+                highlight.AlwaysOnTop = true
+                highlight.ZIndex = 0
+                highlight.Transparency = 0.5
+                highlight.Color3 = Color3.fromRGB(255, 0, 0) -- 紅色
+                highlight.Adornee = part
+                highlight.Parent = part
+
+                espObjects[plr] = espObjects[plr] or {}
+                table.insert(espObjects[plr], highlight)
+            end
+        end
+    end
+end
+
+local function removeESP(plr)
+    if espObjects[plr] then
+        for _, obj in ipairs(espObjects[plr]) do
+            obj:Destroy()
+        end
+        espObjects[plr] = nil
+    end
+end
+
+local function enableESP()
+    espEnabled = true
+    for _, plr in ipairs(Players:GetPlayers()) do
+        addESP(plr)
+    end
+    Players.PlayerAdded:Connect(function(plr)
+        plr.CharacterAdded:Connect(function()
+            if espEnabled then
+                task.wait(1)
+                addESP(plr)
+            end
+        end)
+    end)
+    Players.PlayerRemoving:Connect(function(plr)
+        removeESP(plr)
+    end)
+end
+
+local function disableESP()
+    espEnabled = false
+    for plr, objects in pairs(espObjects) do
+        for _, obj in ipairs(objects) do
+            obj:Destroy()
+        end
+    end
+    espObjects = {}
+end
 
 -- GUI
 local screenGui = Instance.new("ScreenGui")
@@ -55,7 +113,7 @@ title.Size = UDim2.new(1, -60, 1, 0)
 title.Position = UDim2.new(0, 10, 0, 0)
 title.BackgroundTransparency = 1
 title.Font = Enum.Font.GothamBold
-title.Text = "簡易腳本 v1.1.8"
+title.Text = "簡易腳本 v1.1.9"
 title.TextSize = 16
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.TextXAlignment = Enum.TextXAlignment.Left
