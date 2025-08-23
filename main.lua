@@ -102,7 +102,7 @@ title.Size = UDim2.new(1, -60, 1, 0)
 title.Position = UDim2.new(0, 10, 0, 0)
 title.BackgroundTransparency = 1
 title.Font = Enum.Font.GothamBold
-title.Text = "簡易腳本 v1.1.12"
+title.Text = "簡易腳本 v1.1.13"
 title.TextSize = 16
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.TextXAlignment = Enum.TextXAlignment.Left
@@ -206,11 +206,11 @@ end, 3)
 
 -- 🔹 最小化功能
 local miniFrame = Instance.new("TextButton")
-miniFrame.Size = UDim2.new(0, 80, 0, 80)
+miniFrame.Size = UDim2.new(0, 60, 0, 60)
 miniFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 miniFrame.Text = "掛貓"
 miniFrame.TextColor3 = Color3.fromRGB(255, 150, 0)
-miniFrame.TextSize = 24
+miniFrame.TextSize = 28
 miniFrame.Font = Enum.Font.GothamBold
 miniFrame.Visible = false
 miniFrame.Active = true
